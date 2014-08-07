@@ -2,15 +2,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[My Octopress Blog]]></title>
-  <link href="http://pulkit21.github.io/atom.xml" rel="self"/>
-  <link href="http://pulkit21.github.io/"/>
-  <updated>2014-08-07T11:29:12+05:30</updated>
-  <id>http://pulkit21.github.io/</id>
+  <link href="pulkit21.github.io/atom.xml" rel="self"/>
+  <link href="pulkit21.github.io/"/>
+  <updated>2014-08-07T12:05:25+05:30</updated>
+  <id>pulkit21.github.io/</id>
   <author>
     <name><![CDATA[Pulkit Agarwal]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Installing Ruby 2.0.0 on an Amazon Linux AMI]]></title>
+    <link href="pulkit21.github.io/blog/2014/08/07/installing-ruby-2-dot-0-0-on-an-amazon-linux-ami/"/>
+    <updated>2014-08-07T11:38:07+05:30</updated>
+    <id>pulkit21.github.io/blog/2014/08/07/installing-ruby-2-dot-0-0-on-an-amazon-linux-ami</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
 </feed>
