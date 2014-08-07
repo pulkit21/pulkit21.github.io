@@ -3,7 +3,7 @@
 # ----------------------- #
 
 url: http://pulkit21.github.io
-title: My Octopress Blog
+title: My Blog
 subtitle: A blogging framework for hackers.
 author: Pulkit Agarwal
 simple_search: https://www.google.com/search
@@ -74,7 +74,7 @@ twitter_user: pulkit_agarwal
 twitter_tweet_button: true
 
 # Google +1
-google_plus_one: false
+google_plus_one: true
 google_plus_one_size: medium
 
 # Google Plus Profile
