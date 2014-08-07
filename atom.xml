@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[My Octopress Blog]]></title>
+  <title><![CDATA[My Blog]]></title>
   <link href="http://pulkit21.github.io/atom.xml" rel="self"/>
   <link href="http://pulkit21.github.io/"/>
-  <updated>2014-08-07T12:58:34+05:30</updated>
+  <updated>2014-08-07T13:42:59+05:30</updated>
   <id>http://pulkit21.github.io/</id>
   <author>
     <name><![CDATA[Pulkit Agarwal]]></name>
@@ -12,6 +12,109 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Configure Delayed_job for Rails3.x and Rails4.x]]></title>
+    <link href="http://pulkit21.github.io/blog/2014/08/07/configure-delayed-job-for-rails3-dot-x-and-rails4-dot-x/"/>
+    <updated>2014-08-07T13:11:49+05:30</updated>
+    <id>http://pulkit21.github.io/blog/2014/08/07/configure-delayed-job-for-rails3-dot-x-and-rails4-dot-x</id>
+    <content type="html"><![CDATA[<p>Elastic Beanstalk will execute any script in <strong>/opt/elasticbeanstalk/hooks/appdeploy/post</strong> after the web server is restarted. This means if you drop shell scripts in this directory they will be run. Please also refer the <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/customize-containers-windows-ec2.html#customize-containers-windows-format-container_commands">AWS Documentation</a> for container_commands.</p>
+
+<p>I have created a file name <strong>delayed_job.config</strong> in the <strong>.ebextensions</strong> folder in order to deploy a shell script that runs after the deployment gets over.</p>
+
+<h3>For RAILS 3.x</h3>
+
+<hr />
+
+<p>Below  is my delayed_job.sh file for <strong>Rails 3.x</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>commands:
+</span><span class='line'>  create_post_dir:
+</span><span class='line'>    <span class="nb">command</span>: <span class="s2">&quot;mkdir /opt/elasticbeanstalk/hooks/appdeploy/post&quot;</span>
+</span><span class='line'>    ignoreErrors: <span class="nb">true</span>
+</span><span class='line'><span class="nb">    </span>
+</span><span class='line'>files:
+</span><span class='line'>  <span class="s2">&quot;/opt/elasticbeanstalk/hooks/appdeploy/post/delayed_job.sh&quot;</span>:
+</span><span class='line'>    mode: <span class="s2">&quot;000755&quot;</span>
+</span><span class='line'>    owner: root
+</span><span class='line'>    group: root
+</span><span class='line'>    content: <span class="p">|</span>
+</span><span class='line'>      <span class="c">#!/usr/bin/env bash</span>
+</span><span class='line'>      . /opt/elasticbeanstalk/support/envvars
+</span><span class='line'>      <span class="nb">cd</span> <span class="nv">$EB_CONFIG_APP_CURRENT</span>
+</span><span class='line'>      su -c <span class="s2">&quot;RAILS_ENV=production script/delayed_job --pid-dir=$EB_CONFIG_APP_SUPPORT/pids restart&quot;</span> <span class="nv">$EB_CONFIG_APP_USER</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>For RAILS 4.x</h3>
+
+<hr />
+
+<p>Below  is my delayed_job.sh file for <strong>Rails 4.x</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>commands:
+</span><span class='line'>  create_post_dir:
+</span><span class='line'>    <span class="nb">command</span>: <span class="s2">&quot;mkdir /opt/elasticbeanstalk/hooks/appdeploy/post&quot;</span>
+</span><span class='line'>    ignoreErrors: <span class="nb">true</span>
+</span><span class='line'>files:
+</span><span class='line'>  <span class="s2">&quot;/opt/elasticbeanstalk/hooks/appdeploy/post/delayed_job.sh&quot;</span>:
+</span><span class='line'>    mode: <span class="s2">&quot;000755&quot;</span>
+</span><span class='line'>    owner: root
+</span><span class='line'>    group: root
+</span><span class='line'>    content: <span class="p">|</span>
+</span><span class='line'>      <span class="c">#!/usr/bin/env bash</span>
+</span><span class='line'>      . /opt/elasticbeanstalk/support/envvars
+</span><span class='line'>      <span class="nb">cd</span> <span class="nv">$EB_CONFIG_APP_CURRENT</span>
+</span><span class='line'>      su -c <span class="s2">&quot;RAILS_ENV=production bin/delayed_job  --pid-dir=$EB_CONFIG_APP_SUPPORT/pids restart&quot;</span> <span class="nv">$EB_CONFIG_APP_USER</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>What this config do is:</h3>
+
+<ul>
+<li>Create the &ldquo;post&rdquo; directory if it doesn&rsquo;t already exist, it ignores errors (If the directory already exists).</li>
+<li>Deploy the shell script with the appropriate permission into the right directory.</li>
+</ul>
+
+
+<h3>What this shell script do is:</h3>
+
+<ul>
+<li>Setup the environment variables in (<strong>(/opt/elasticbeanstalk</strong>).</li>
+<li>Restart delayed_job as per the app user (usually <strong>webapp</strong>), using a shared pids directory to make sure it will kill the old version first.</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Installing Ruby 2.0.0 on an Amazon Linux AMI]]></title>

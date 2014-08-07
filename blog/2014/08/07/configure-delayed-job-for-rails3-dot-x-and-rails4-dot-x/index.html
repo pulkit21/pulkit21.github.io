@@ -2,7 +2,7 @@
 <html class="no-js" lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Installing Ruby 2.0.0 on an Amazon Linux AMI - My Blog</title>
+  <title>Configure Delayed_job for Rails3.x and Rails4.x - My Blog</title>
   <meta name="author" content="Pulkit Agarwal">
 
   
@@ -14,7 +14,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://pulkit21.github.io/blog/2014/08/07/installing-ruby-2-dot-0-0-on-an-amazon-linux-ami">
+  <link rel="canonical" href="http://pulkit21.github.io/blog/2014/08/07/configure-delayed-job-for-rails3-dot-x-and-rails4-dot-x">
   <link href="/favicon.png" type="image/png" rel="icon">
   <link href="/atom.xml" rel="alternate" title="My Blog" type="application/atom+xml">
 
@@ -102,7 +102,7 @@
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-07T11:38:07+05:30"  data-updated="true" itemprop="datePublished dateCreated">Aug 7<sup>th</sup>, 2014</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-07T13:11:49+05:30"  data-updated="true" itemprop="datePublished dateCreated">Aug 7<sup>th</sup>, 2014</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
              data-disqus-identifier="http://pulkit21.github.io">Comments</a>
@@ -111,48 +111,22 @@
     
     
     <h1 class="entry-title" itemprop="name headline">
-        Installing Ruby 2.0.0 on an Amazon Linux AMI
+        Configure Delayed_job for Rails3.x and Rails4.x
         
     </h1>
     
   </header>
 
 
-<div class="entry-content clearfix" itemprop="articleBody"><p>Install a ruby 2.0.0 on an Amazon AMI. This is just a quick update to get version 2.0.0 up. We used the current 64 bits Amazon AMI. Note that the complete procedure might take a few hours on a Amazon Micro instance. Deleting the old version of Ruby also removes the package aws-amitools-ec2. As long as you don’t need to create your own AMIs with this instance, you will be fine.
-Here is the procedure, as usual log in as ec2-user and perform the following from the shell:</p>
+<div class="entry-content clearfix" itemprop="articleBody"><p>Elastic Beanstalk will execute any script in <strong>/opt/elasticbeanstalk/hooks/appdeploy/post</strong> after the web server is restarted. This means if you drop shell scripts in this directory they will be run. Please also refer the <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/customize-containers-windows-ec2.html#customize-containers-windows-format-container_commands">AWS Documentation</a> for container_commands.</p>
 
-<p>Login as root</p>
+<p>I have created a file name <strong>delayed_job.config</strong> in the <strong>.ebextensions</strong> folder in order to deploy a shell script that runs after the deployment gets over.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>sudo su -
-</span><span class='line'><span class="nb">cd</span>
-</span></code></pre></td></tr></table></div></figure>
+<h3>For RAILS 3.x</h3>
 
+<hr />
 
-<p>Remove the old version of Ruby</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>yum remove ruby
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Install the dependency packages</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>yum groupinstall <span class="s1">&#39;Development Tools&#39;</span>
-</span><span class='line'>yum groupinstall development-libs
-</span><span class='line'>yum install libffi-devel
-</span><span class='line'>yum install libyaml-devel
-</span><span class='line'>yum update
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>After intalling the dependency packages download and  install <strong>Ruby  2.0.0</strong></p>
+<p>Below  is my delayed_job.sh file for <strong>Rails 3.x</strong></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -164,20 +138,81 @@ Here is the procedure, as usual log in as ec2-user and perform the following fro
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>wget ftp://ftp.ruby-lang.org/pub/ruby/2.0/ruby-2.0.0-p195.tar.gz
-</span><span class='line'>tar xzvf ruby-2.0.0-p195.tar.gz
-</span><span class='line'><span class="nb">cd </span>ruby-2.0.0-p195
-</span><span class='line'>./configure
-</span><span class='line'>make
-</span><span class='line'>make install
-</span><span class='line'>make clean
-</span><span class='line'>gem update --system
-</span><span class='line'><span class="nb">exit</span>
-</span><span class='line'>ruby --version <span class="o">(</span>this should give you the newly installed version<span class="o">)</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>commands:
+</span><span class='line'>  create_post_dir:
+</span><span class='line'>    <span class="nb">command</span>: <span class="s2">&quot;mkdir /opt/elasticbeanstalk/hooks/appdeploy/post&quot;</span>
+</span><span class='line'>    ignoreErrors: <span class="nb">true</span>
+</span><span class='line'><span class="nb">    </span>
+</span><span class='line'>files:
+</span><span class='line'>  <span class="s2">&quot;/opt/elasticbeanstalk/hooks/appdeploy/post/delayed_job.sh&quot;</span>:
+</span><span class='line'>    mode: <span class="s2">&quot;000755&quot;</span>
+</span><span class='line'>    owner: root
+</span><span class='line'>    group: root
+</span><span class='line'>    content: <span class="p">|</span>
+</span><span class='line'>      <span class="c">#!/usr/bin/env bash</span>
+</span><span class='line'>      . /opt/elasticbeanstalk/support/envvars
+</span><span class='line'>      <span class="nb">cd</span> <span class="nv">$EB_CONFIG_APP_CURRENT</span>
+</span><span class='line'>      su -c <span class="s2">&quot;RAILS_ENV=production script/delayed_job --pid-dir=$EB_CONFIG_APP_SUPPORT/pids restart&quot;</span> <span class="nv">$EB_CONFIG_APP_USER</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>That’s it! Have fun with Ruby!</p>
+<h3>For RAILS 4.x</h3>
+
+<hr />
+
+<p>Below  is my delayed_job.sh file for <strong>Rails 4.x</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>commands:
+</span><span class='line'>  create_post_dir:
+</span><span class='line'>    <span class="nb">command</span>: <span class="s2">&quot;mkdir /opt/elasticbeanstalk/hooks/appdeploy/post&quot;</span>
+</span><span class='line'>    ignoreErrors: <span class="nb">true</span>
+</span><span class='line'>files:
+</span><span class='line'>  <span class="s2">&quot;/opt/elasticbeanstalk/hooks/appdeploy/post/delayed_job.sh&quot;</span>:
+</span><span class='line'>    mode: <span class="s2">&quot;000755&quot;</span>
+</span><span class='line'>    owner: root
+</span><span class='line'>    group: root
+</span><span class='line'>    content: <span class="p">|</span>
+</span><span class='line'>      <span class="c">#!/usr/bin/env bash</span>
+</span><span class='line'>      . /opt/elasticbeanstalk/support/envvars
+</span><span class='line'>      <span class="nb">cd</span> <span class="nv">$EB_CONFIG_APP_CURRENT</span>
+</span><span class='line'>      su -c <span class="s2">&quot;RAILS_ENV=production bin/delayed_job  --pid-dir=$EB_CONFIG_APP_SUPPORT/pids restart&quot;</span> <span class="nv">$EB_CONFIG_APP_USER</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>What this config do is:</h3>
+
+<ul>
+<li>Create the &ldquo;post&rdquo; directory if it doesn&rsquo;t already exist, it ignores errors (If the directory already exists).</li>
+<li>Deploy the shell script with the appropriate permission into the right directory.</li>
+</ul>
+
+
+<h3>What this shell script do is:</h3>
+
+<ul>
+<li>Setup the environment variables in (<strong>(/opt/elasticbeanstalk</strong>).</li>
+<li>Restart delayed_job as per the app user (usually <strong>webapp</strong>), using a shared pids directory to make sure it will kill the old version first.</li>
+</ul>
+
 </div>
 
 
@@ -201,7 +236,7 @@ Here is the procedure, as usual log in as ec2-user and perform the following fro
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-07T11:38:07+05:30"  data-updated="true" itemprop="datePublished dateCreated">Aug 7<sup>th</sup>, 2014</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-07T13:11:49+05:30"  data-updated="true" itemprop="datePublished dateCreated">Aug 7<sup>th</sup>, 2014</time>
           
 
 
@@ -209,7 +244,7 @@ Here is the procedure, as usual log in as ec2-user and perform the following fro
         
           <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://pulkit21.github.io/blog/2014/08/07/installing-ruby-2-dot-0-0-on-an-amazon-linux-ami/" data-via="pulkit_agarwal" data-counturl="http://pulkit21.github.io/blog/2014/08/07/installing-ruby-2-dot-0-0-on-an-amazon-linux-ami/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://pulkit21.github.io/blog/2014/08/07/configure-delayed-job-for-rails3-dot-x-and-rails4-dot-x/" data-via="pulkit_agarwal" data-counturl="http://pulkit21.github.io/blog/2014/08/07/configure-delayed-job-for-rails3-dot-x-and-rails4-dot-x/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -223,8 +258,8 @@ Here is the procedure, as usual log in as ec2-user and perform the following fro
         
           <ul class="meta text-muted pager">
             
+            <li class="previous"><a href="/blog/2014/08/07/installing-ruby-2-dot-0-0-on-an-amazon-linux-ami/" title="Previous Post:  Installing Ruby 2.0.0 on an Amazon Linux AMI">&laquo;  Installing Ruby 2.0.0 on an Amazon Linux AMI</a></li>
             
-            <li class="next"><a href="/blog/2014/08/07/configure-delayed-job-for-rails3-dot-x-and-rails4-dot-x/" title="Next Post: Configure Delayed_job For Rails3.x and Rails4.x">Configure Delayed_job For Rails3.x and Rails4.x &raquo;</a></li>
             
           </ul>
         
@@ -249,9 +284,9 @@ Here is the procedure, as usual log in as ec2-user and perform the following fro
   
   <div id="recent_posts" class="list-group">
     
-    <a class="list-group-item " href="/blog/2014/08/07/configure-delayed-job-for-rails3-dot-x-and-rails4-dot-x/">Configure Delayed_job for Rails3.x and Rails4.x</a>
+    <a class="list-group-item active" href="/blog/2014/08/07/configure-delayed-job-for-rails3-dot-x-and-rails4-dot-x/">Configure Delayed_job for Rails3.x and Rails4.x</a>
     
-    <a class="list-group-item active" href="/blog/2014/08/07/installing-ruby-2-dot-0-0-on-an-amazon-linux-ami/">Installing Ruby 2.0.0 on an Amazon Linux AMI</a>
+    <a class="list-group-item " href="/blog/2014/08/07/installing-ruby-2-dot-0-0-on-an-amazon-linux-ami/">Installing Ruby 2.0.0 on an Amazon Linux AMI</a>
     
   </div>
 </section>
@@ -320,8 +355,8 @@ Here is the procedure, as usual log in as ec2-user and perform the following fro
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://pulkit21.github.io/blog/2014/08/07/installing-ruby-2-dot-0-0-on-an-amazon-linux-ami/';
-        var disqus_url = 'http://pulkit21.github.io/blog/2014/08/07/installing-ruby-2-dot-0-0-on-an-amazon-linux-ami/';
+        var disqus_identifier = 'http://pulkit21.github.io/blog/2014/08/07/configure-delayed-job-for-rails3-dot-x-and-rails4-dot-x/';
+        var disqus_url = 'http://pulkit21.github.io/blog/2014/08/07/configure-delayed-job-for-rails3-dot-x-and-rails4-dot-x/';
         var disqus_script = 'embed.js';
       
     (function () {
