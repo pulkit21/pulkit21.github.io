@@ -118,7 +118,66 @@
   </header>
 
 
-<div class="entry-content clearfix" itemprop="articleBody">
+<div class="entry-content clearfix" itemprop="articleBody"><p>Install a ruby 2.0.0 on an Amazon AMI. This is just a quick update to get version 2.0.0 up. We used the current 64 bits Amazon AMI. Note that the complete procedure might take a few hours on a Amazon Micro instance. Deleting the old version of Ruby also removes the package aws-amitools-ec2. As long as you don’t need to create your own AMIs with this instance, you will be fine.
+Here is the procedure, as usual log in as ec2-user and perform the following from the shell:</p>
+
+<p>Login as root</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>sudo su -
+</span><span class='line'><span class="nb">cd</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Remove the old version of Ruby</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>yum remove ruby
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Install the dependency packages</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>yum groupinstall <span class="s1">&#39;Development Tools&#39;</span>
+</span><span class='line'>yum groupinstall development-libs
+</span><span class='line'>yum install libffi-devel
+</span><span class='line'>yum install libyaml-devel
+</span><span class='line'>yum update
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After intalling the dependency packages download and  install <strong>Ruby  2.0.0</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>wget ftp://ftp.ruby-lang.org/pub/ruby/2.0/ruby-2.0.0-p195.tar.gz
+</span><span class='line'>tar xzvf ruby-2.0.0-p195.tar.gz
+</span><span class='line'><span class="nb">cd </span>ruby-2.0.0-p195
+</span><span class='line'>./configure
+</span><span class='line'>make
+</span><span class='line'>make install
+</span><span class='line'>make clean
+</span><span class='line'>gem update --system
+</span><span class='line'><span class="nb">exit</span>
+</span><span class='line'>ruby --version <span class="o">(</span>this should give you the newly installed version<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That’s it! Have fun with Ruby!</p>
 </div>
 
 
