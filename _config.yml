@@ -3,7 +3,7 @@
 # ----------------------- #
 
 url: http://pulkit21.github.io
-title: My Blog
+title: Pulkit Agarwal
 subtitle: A blogging framework for hackers.
 author: Pulkit Agarwal
 simple_search: https://www.google.com/search
@@ -95,7 +95,7 @@ disqus_short_name: pulkit21
 disqus_show_comment_count: true
 
 # Google Analytics
-google_analytics_tracking_id:
+google_analytics_tracking_id: UA-53595682-1
 
 # Facebook Like
 facebook_like: true
